@@ -1,0 +1,51 @@
+{
+  "name": "ah-mongo-plugin",
+  "version": "1.0.0",
+  "description": "actionhero mongodb plugin compatible with 18+ version",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test mocha",
+    "pretest": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rakhnin/ah-mongo-plugin.git"
+  },
+  "keywords": [
+    "actionhero",
+    "mongodb",
+    "mongoose"
+  ],
+  "author": "Andriy Rakhnin <a@rakhnin.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rakhnin/ah-mongo-plugin/issues"
+  },
+  "homepage": "https://github.com/rakhnin/ah-mongo-plugin#readme",
+  "engines": {
+    "node": ">=8.0.0",
+    "npm": "5.3.x"
+  },
+  "dependencies": {
+    "mongoose": "^4.12.3"
+  },
+  "devDependencies": {
+    "actionhero": "^18.0.1",
+    "chai": "^4.1.2",
+    "cross-env": "^5.0.5",
+    "dirty-chai": "^2.0.0",
+    "mocha": "^4.0.1",
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ]
+  }
+}
