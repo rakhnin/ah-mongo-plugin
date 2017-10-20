@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha",
-    "pretest": "standard"
+    "pretest": "standard",
+    "postinstall": "node contrib/postinstall"
   },
   "repository": {
     "type": "git",
