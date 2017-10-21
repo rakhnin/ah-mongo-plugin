@@ -21,7 +21,19 @@ module.exports = class Mongo extends ActionHero.Initializer {
       config: api.config.mongo || {},
       mongoose: mongoose,
       models: [],
-      load: function () {
+      init: function () {
+        this.initLogger()
+        this.initModels()
+      },
+      initLogger: function () {
+        const logLevel = this.config.logLevel
+        if (logLevel) {
+          this.mongoose.set('debug', function () {
+            api.log && api.log('[ ah-mongo-plugin ]', logLevel, Array.prototype.slice.call(arguments))
+          })
+        }
+      },
+      initModels: function () {
         if (this.config.modelPath) {
           const dir = path.normalize(this.config.modelPath)
           fs.readdirSync(dir).forEach((file) => {
@@ -36,9 +48,6 @@ module.exports = class Mongo extends ActionHero.Initializer {
       },
       connect: async function () {
         if (this.config.isAutoStart) {
-          if (this.config.isUseDebug) {
-            this.mongoose.set('debug', true)
-          }
           try {
             await this.mongoose.connect(this.config.connectionURL, this.config.connectionOptions || {})
           } catch (e) {
@@ -50,10 +59,10 @@ module.exports = class Mongo extends ActionHero.Initializer {
         await this.mongoose.disconnect()
       }
     }
+    api.mongo.init()
   }
 
   async start () {
-    api.mongo.load()
     await api.mongo.connect()
   }
   async stop () {

@@ -13,7 +13,7 @@ exports['default'] = {
         autoReconnect: true,
         reconnectTries: Number.MAX_VALUE
       },
-      isUseDebug: true,
+      logLevel: 'debug',
       isAutoStart: true,
       modelPath: path.join(api.projectRoot, 'models')
     }
