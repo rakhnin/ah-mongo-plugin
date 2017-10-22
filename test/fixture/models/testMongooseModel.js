@@ -1,3 +1,5 @@
 const mongoose = require('mongoose')
 
-module.exports = mongoose.model('TestMongooseModel', new mongoose.Schema({ name: 'string' }))
+module.exports = function (modelName) {
+  return mongoose.model(modelName, new mongoose.Schema({ name: 'string' }))
+}

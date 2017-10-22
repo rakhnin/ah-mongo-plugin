@@ -6,6 +6,8 @@ const fs = require('fs')
 const path = require('path')
 const mongoose = require('mongoose')
 
+const logIdentifier = '[ ah-mongo-plugin ]'
+
 module.exports = class Mongo extends ActionHero.Initializer {
   constructor () {
     super()
@@ -29,7 +31,7 @@ module.exports = class Mongo extends ActionHero.Initializer {
         const logLevel = this.config.logLevel
         if (logLevel) {
           this.mongoose.set('debug', function () {
-            api.log && api.log('[ ah-mongo-plugin ]', logLevel, Array.prototype.slice.call(arguments))
+            api.log && api.log(logIdentifier, logLevel, Array.prototype.slice.call(arguments))
           })
         }
       },
@@ -37,14 +39,22 @@ module.exports = class Mongo extends ActionHero.Initializer {
         if (this.config.modelPath) {
           const dir = path.normalize(this.config.modelPath)
           fs.readdirSync(dir).forEach((file) => {
-            const filePath = path.join(dir, file)
-            let name = path.parse(filePath).name
-            if (name[0]) {
-              name = name[0].toUpperCase() + name.substring(1)
-            }
-            this.models[name] = require(filePath)
+            this.loadModel(path.join(dir, file), false)
           })
         }
+      },
+      loadModel: function (filePath, isReload) {
+        api.watchFileAndAct(filePath, () => {
+          api.mongo.loadModel(filePath, true)
+        })
+        let name = path.parse(filePath).name
+        if (name[0]) {
+          name = name[0].toUpperCase() + name.substring(1)
+        }
+        isReload && this.mongoose && this.mongoose.models[name] && (delete this.mongoose.models[name])
+        isReload && this.mongoose && this.mongoose.modelSchemas[name] && (delete this.mongoose.modelSchemas[name])
+        this.models[name] = require(filePath)(name)
+        api.log && api.log(logIdentifier, this.config.logLevel, ['model', isReload ? 'reload model' : 'load model', name, filePath])
       },
       connect: async function () {
         if (this.config.isAutoStart) {
