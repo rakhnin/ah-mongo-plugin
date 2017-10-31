@@ -19,7 +19,7 @@ module.exports = class Mongo extends ActionHero.Initializer {
 
   async initialize () {
     mongoose.Promise = global.Promise
-    api.mongo = {
+    api.mongo = api.mongo || {
       config: api.config.mongo || {},
       mongoose: mongoose,
       models: [],
@@ -53,7 +53,7 @@ module.exports = class Mongo extends ActionHero.Initializer {
         }
         isReload && this.mongoose && this.mongoose.models[name] && (delete this.mongoose.models[name])
         isReload && this.mongoose && this.mongoose.modelSchemas[name] && (delete this.mongoose.modelSchemas[name])
-        this.models[name] = require(filePath)(name)
+        !this.models[name] && (this.models[name] = require(filePath)(name))
         api.log && api.log(logIdentifier, this.config.logLevel, ['model', isReload ? 'reload model' : 'load model', name, filePath])
       },
       connect: async function () {
