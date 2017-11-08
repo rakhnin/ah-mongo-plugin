@@ -1,6 +1,6 @@
 {
   "name": "ah-mongo-plugin",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "actionhero mongodb plugin compatible with 18+ version",
   "main": "index.js",
   "scripts": {
